@@ -50,7 +50,7 @@ authRouter.post(`${baseurl}/login`, async (req, res) => {
 
         const token = await authLoginService(username,password);
 
-        //TODO:- add token to cookie
+        res.cookie('auth',token);
 
         return res.status(200).json({
             error: false,

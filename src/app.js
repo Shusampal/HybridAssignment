@@ -5,11 +5,13 @@ const mongo = require('./configs/database');
 const authRouter = require('./controllers/auth')
 const buyerRouter = require('./controllers/buyer')
 const sellerRouter = require('./controllers/seller')
+const cookieParser = require('cookie-parser')
 const PORT = 5000;
 
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(cookieParser());
 
 
 // Mongo DB connection

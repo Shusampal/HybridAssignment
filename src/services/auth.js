@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
 const jwtBuilder = require('../utils/jwtBuilder');
 
 const authRegisterService = async (username, password, userType) => {
@@ -12,7 +14,8 @@ const authRegisterService = async (username, password, userType) => {
             }
         }
 
-        const userObj = { username, password, userType };
+        const hash = bcrypt.hashSync(password, salt);
+        const userObj = { username, hash, userType };
 
         await new User(userObj).save();
 
@@ -25,25 +28,33 @@ const authRegisterService = async (username, password, userType) => {
 
 const authLoginService = async (username, password) => {
     try {
-        const isUserInDb = await User.findOne({ username }).exec();
+        const UserInDb = await User.findOne({ username }).exec();
 
-        if (!isUserInDb) {
+        if (!UserInDb) {
             throw {
                 'statusCode': 400,
                 'message': 'user not registered'
             }
         }
 
-        //TODO:- decode the password and check if password correct or not
+        const dbHash = UserInDb.hash;
 
+        const isPasswordMatched = bcrypt.compareSync(password, dbHash);
 
-        return jwtBuilder(username);
+        if(isPasswordMatched){
+            return jwtBuilder(username);
+        }
+
+        throw {
+            'statusCode': 400,
+            'message': 'username or password is wrong'
+        }
+        
 
     } catch (error) {
         console.log('database error in authRegisterService');
         throw new Error("internal server error");
     }
-
 
 }
 
