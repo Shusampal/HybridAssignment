@@ -39,6 +39,25 @@ authRouter.post(`${baseurl}/register`, async (req, res) => {
 authRouter.post(`${baseurl}/login`, async (req, res) => {
     try {
 
+        const { username , password } = req.body;
+
+        if(!username || !password ) {
+            throw {
+                'statusCode': 400,
+                'message': 'required parameters missing'
+            }
+        }
+
+        const token = await authLoginService(username,password);
+
+        //TODO:- add token to cookie
+
+        return res.status(200).json({
+            error: false,
+            message: 'user login done',
+            data:{}
+        })
+
     } catch (error) {
 
         if (error.statusCode && error.message) {

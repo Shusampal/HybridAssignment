@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const jwtBuilder = require('../utils/jwtBuilder');
 
 const authRegisterService = async (username, password, userType) => {
     try {
@@ -22,8 +23,26 @@ const authRegisterService = async (username, password, userType) => {
 }
 
 
-const authLoginService = (username, password) => {
+const authLoginService = async (username, password) => {
+    try {
+        const isUserInDb = await User.findOne({ username }).exec();
 
+        if (!isUserInDb) {
+            throw {
+                'statusCode': 400,
+                'message': 'user not registered'
+            }
+        }
+
+        //TODO:- decode the password and check if password correct or not
+
+
+        return jwtBuilder(username);
+
+    } catch (error) {
+        console.log('database error in authRegisterService');
+        throw new Error("internal server error");
+    }
 
 
 }
