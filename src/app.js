@@ -34,7 +34,7 @@ connectDB();
 // To Route all request
 app.use(authRouter);
 app.use(buyerRouter);
-// app.use(sellerRouter);
+app.use(sellerRouter);
 
 
 // To handle Not found resources

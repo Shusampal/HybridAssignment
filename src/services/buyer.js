@@ -1,5 +1,4 @@
 const User = require('../models/user');
-const bcrypt = require('bcryptjs');
 
 const buyerGetAllSellersService = async () => {
     try {
@@ -49,5 +48,21 @@ const buyerGetCatalogBySellerService = async (sellerId) => {
     }
 }
 
+const buyerCreateOrder = async (sellerId , username , cart ) => {
+    try {
+        const sellerDB = await User.findOne({ uid : sellerId }).lean();
+
+        // TODO
+
+    } catch (error) {
+        if(error.statusCode && error.message){
+            throw error;
+        }
+        console.log(error);
+        throw new Error("database error");
+    }
+}
+
 module.exports.buyerGetAllSellersService = buyerGetAllSellersService;
 module.exports.buyerGetCatalogBySellerService = buyerGetCatalogBySellerService;
+module.exports.buyerCreateOrder = buyerCreateOrder;
