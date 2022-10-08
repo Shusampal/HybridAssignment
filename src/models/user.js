@@ -21,7 +21,9 @@ const userSchema = new Schema({
         required: true
     },
     catalog:{
-
+        type: [Schema.Types.Mixed],
+        required: true,
+        default: []
     }
 
 }, { timestamps: true })

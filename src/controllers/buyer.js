@@ -2,7 +2,7 @@ const express = require('express');
 const buyerRouter = express.Router();
 const errorObjectBuilder = require('../utils/errorObjectBuilder');
 const checkToken = require('../middlewares/checkToken');
-const { buyerGetAllSellersService  } = require('../services/buyer');
+const { buyerGetAllSellersService , buyerGetCatalogBySellerService } = require('../services/buyer');
 
 const baseurl = '/api/buyer'
 
@@ -30,13 +30,14 @@ buyerRouter.get(`${baseurl}/list-of-sellers` , checkToken , async (req, res) => 
 
 buyerRouter.get(`${baseurl}/seller-catalog/:seller_id` , checkToken , async (req, res) => {
     try {
-        const allSellers = await buyerGetAllSellersService();
+        const catalog = await buyerGetCatalogBySellerService(req.params.seller_id);
         
         return res.status(200).json({
             error: false,
-            message: 'list of all sellers',
+            message: 'list of catalogue of a seller',
             data:{
-                sellers: allSellers
+                sellerId : req.params.seller_id,
+                catalog
             }
         })
 
