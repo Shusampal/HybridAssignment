@@ -24,6 +24,10 @@ const userSchema = new Schema({
         type: [Schema.Types.Mixed],
         required: true,
         default: []
+    },
+    orders:{
+        type: [Schema.Types.Mixed],
+        default: []
     }
 
 }, { timestamps: true })
