@@ -33,7 +33,7 @@ connectDB();
 
 // To Route all request
 app.use(authRouter);
-// app.use(buyerRouter);
+app.use(buyerRouter);
 // app.use(sellerRouter);
 
 

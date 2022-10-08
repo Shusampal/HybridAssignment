@@ -1,10 +1,13 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const ShortUniqueId = require('short-unique-id')
+const uniqueid = new ShortUniqueId({ length: 10 });
 const salt = bcrypt.genSaltSync(10);
 const jwtBuilder = require('../utils/jwtBuilder');
 
 const authRegisterService = async (username, password, userType) => {
     try {
+
         const isUserInDb = await User.exists({ username });
 
         if (isUserInDb) {
@@ -13,15 +16,26 @@ const authRegisterService = async (username, password, userType) => {
                 'message': 'user already registered'
             }
         }
-
+        
         const hash = bcrypt.hashSync(password, salt);
-        const userObj = { username, hash, userType };
 
-        await new User(userObj).save();
+        const uid = uniqueid();
+
+        const userObj = new User({
+            uid , 
+            username, 
+            hash , 
+            userType
+        })
+        
+        await userObj.save();
 
     } catch (error) {
-        console.log('database error in authRegisterService');
-        throw new Error("internal server error");
+        if(error.statusCode && error.message){
+            throw error;
+        }
+        console.log(error);
+        throw new Error("database error");
     }
 }
 
@@ -52,8 +66,11 @@ const authLoginService = async (username, password) => {
         
 
     } catch (error) {
-        console.log('database error in authRegisterService');
-        throw new Error("internal server error");
+        if(error.statusCode && error.message){
+            throw error;
+        }
+        console.log(error);
+        throw new Error("database error");
     }
 
 }

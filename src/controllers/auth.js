@@ -17,7 +17,7 @@ authRouter.post(`${baseurl}/register`, async (req, res) => {
             }
         }
 
-        await authRegisterService(username,password,userType);
+        await authRegisterService(username,password,userType.toLowerCase());
         
         return res.status(200).json({
             error: false,

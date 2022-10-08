@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
+    uid:{
+        type: String,
+        required : true
+    },
     username: {
         type: String,
         required: true,
@@ -13,8 +17,11 @@ const userSchema = new Schema({
     },
     userType:{
         type: String,
-        required: true,
-        enum: ["buyer" , "seller"]
+        enum:['buyer','seller'],
+        required: true
+    },
+    catalog:{
+
     }
 
 }, { timestamps: true })
