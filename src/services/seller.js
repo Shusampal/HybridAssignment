@@ -40,7 +40,7 @@ const sellerCreatecatalog = async (username,catalog) => {
 const sellerListOfOrders = async (username) => {
     try {
 
-        const sellerDB = await User.findOne({username}).exec();
+        const sellerDB = await User.findOne({username}).lean();
 
         if(!sellerDB){
             throw{
