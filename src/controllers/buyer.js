@@ -63,7 +63,7 @@ buyerRouter.post(`${baseurl}/create-order/:seller_id` , checkToken , async (req,
             }
         }
 
-        await buyerCreateOrder(seller_id,req.user,cart);
+        await buyerCreateOrder(req.params.seller_id,req.user,cart);
         
         return res.status(200).json({
             error: false,
